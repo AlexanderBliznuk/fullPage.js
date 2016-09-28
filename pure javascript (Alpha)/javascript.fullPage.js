@@ -241,6 +241,13 @@
         }
     }
 
+    function addEventHandlers() {
+        setMouseWheelScrolling(true);
+        addTouchHandler();
+        addResizeHandler();
+        addScrollHandler();
+    }
+
     function init(callback){
         displayWarnings();
 
@@ -250,10 +257,7 @@
         }
         initConatainer($$(options.sectionSelector));
 
-        setMouseWheelScrolling(true);
-        addTouchHandler();
-        addResizeHandler();
-        addScrollHandler();
+        addEventHandlers();
 
         addInternalClassNames($$(options.sectionSelector), SECTION);
         addInternalClassNames($$(options.slideSelector), SLIDE);
