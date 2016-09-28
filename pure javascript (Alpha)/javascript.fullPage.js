@@ -239,14 +239,8 @@
 
                 setCss($(SLIDES_CONTAINER_SEL, section), 'width',  slides.length * 100 + '%');
 
-                if(options.controlArrows && slides.length > 1){
-                    createSlideArrows(section);
-                }
-
-                if(options.slidesNavigation){
-                    addSlidesNavigation(section, slides.length);
-                }
-
+                createSlideArrows(section, slides);
+                addSlidesNavigation(section, slides.length);
 
                 for(var a = 0; a<slides.length; a++){
                     setCss(slides[a], 'width', 100 / slides.length + '%');
@@ -808,25 +802,25 @@
     /**
      * Creates the control arrows for the given section
      */
-    function createSlideArrows(section){
-        var prev = document.createElement('div');
-        prev.className = SLIDES_ARROW_PREV;
+    function createSlideArrows(section, slides){
+        if(options.controlArrows && slides.length > 1) {
+            var prev = document.createElement('div');
+            prev.className = SLIDES_ARROW_PREV;
 
-        var next = document.createElement('div');
-        next.className = SLIDES_ARROW_NEXT;
+            var next = document.createElement('div');
+            next.className = SLIDES_ARROW_NEXT;
 
-        var slides = $(SLIDES_WRAPPER_SEL, section);
+            if (options.controlArrowColor != '#fff') {
+                //setCss(next, 'border-color', 'transparent transparent transparent '+options.controlArrowColor);
+                //setCss(prev, 'border-color', 'transparent '+ options.controlArrowColor + ' transparent transparent');
+            }
 
-        if(options.controlArrowColor != '#fff'){
-            //setCss(next, 'border-color', 'transparent transparent transparent '+options.controlArrowColor);
-            //setCss(prev, 'border-color', 'transparent '+ options.controlArrowColor + ' transparent transparent');
-        }
+            $(SLIDES_WRAPPER_SEL, section).parentNode.appendChild(prev)
+                .parentNode.appendChild(next);
 
-        slides.parentNode.appendChild(prev);
-        slides.parentNode.appendChild(next);
-
-        if(!options.loopHorizontal){
-            $(SLIDES_ARROW_PREV_SEL, section).style.display = 'none';
+            if (!options.loopHorizontal) {
+                $(SLIDES_ARROW_PREV_SEL, section).style.display = 'none';
+            }
         }
     }
 
@@ -1802,32 +1796,34 @@
      * Creates a landscape navigation bar with dots for horizontal sliders.
      */
     function addSlidesNavigation(section, numSlides){
-        var div = document.createElement('div');
-        div.className = SLIDES_NAV;
+        if(options.slidesNavigation) {
+            var div = document.createElement('div');
+            div.className = SLIDES_NAV;
 
-        var divUl = document.createElement('ul');
-        div.appendChild(divUl);
+            var divUl = document.createElement('ul');
+            div.appendChild(divUl);
 
-        section.appendChild(div);
+            section.appendChild(div);
 
-        var nav = $(SLIDES_NAV_SEL, section);
-        var ul =  $('ul', nav);
+            var nav = $(SLIDES_NAV_SEL, section);
+            var ul = $('ul', nav);
 
-        //top or bottom
-        addClass(nav, options.slidesNavPosition);
+            //top or bottom
+            addClass(nav, options.slidesNavPosition);
 
-        var list = '';
-        for(var i=0; i< numSlides; i++){
-            list = list + '<li><a href="#"><span></span></a></li>';
+            var list = '';
+            for (var i = 0; i < numSlides; i++) {
+                list = list + '<li><a href="#"><span></span></a></li>';
+            }
+
+            ul.innerHTML = ul.innerHTML + list;
+
+            //centering it
+            setCss(nav, 'margin-left', '-' + (nav.offsetWidth / 2) + 'px');
+
+            var firstLi = $$('li', nav)[0];
+            addClass($('a', firstLi), ACTIVE);
         }
-
-        ul.innerHTML = ul.innerHTML + list;
-
-        //centering it
-        setCss(nav, 'margin-left', '-' + (nav.offsetWidth/2) + 'px');
-
-        var firstLi = $$('li', nav)[0];
-        addClass( $('a', firstLi), ACTIVE);
     }
 
 
