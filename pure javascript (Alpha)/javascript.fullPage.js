@@ -202,39 +202,31 @@
 
         var sections = $$(SECTION_SEL);
         for(var i = 0; i<sections.length; i++){
-            var index = i;
             var section = sections[i];
-            var that = section;
-            var slides = $$(SLIDE_SEL, section);
-            var numSlides = slides.length;
+            var numSlides = $$(SLIDE_SEL, section).length;
 
             //if no active section is defined, the 1st one will be the default one
-            if(!index && $(SECTION_ACTIVE_SEL) === null) {
+            if(!i && $(SECTION_ACTIVE_SEL) === null) {
                 addClass(section, ACTIVE);
             }
 
-            if (typeof options.anchors[index] !== 'undefined') {
-                section.setAttribute('data-anchor', options.anchors[index]);
+            if (typeof options.anchors[i] !== 'undefined') {
+                section.setAttribute('data-anchor', options.anchors[i]);
 
                 //activating the menu / nav element on load
                 if(hasClass(section, ACTIVE)){
-                    activateMenuAndNav(options.anchors[index], index);
+                    activateMenuAndNav(options.anchors[i], i);
                 }
             }
 
             // if there's any slide
             if (numSlides > 0) {
-                var sliderWidth = numSlides * 100;
-                var slideWidth = 100 / numSlides;
-
-                var slidesHTML = section.innerHTML;
-                var newHTML = '<div class="'+ SLIDES_WRAPPER +'"><div class="'+SLIDES_CONTAINER+'">' + slidesHTML + '</div></div>';
-                section.innerHTML = newHTML;
+                section.innerHTML = '<div class="'+ SLIDES_WRAPPER +'"><div class="'+SLIDES_CONTAINER+'">' + section.innerHTML + '</div></div>';
 
                 //getting again the NEW dom elements after innerHTML
-                slides = $$(SLIDE_SEL, section);
+                var slides = $$(SLIDE_SEL, section);
 
-                setCss($(SLIDES_CONTAINER_SEL, section), 'width',  sliderWidth + '%');
+                setCss($(SLIDES_CONTAINER_SEL, section), 'width',  numSlides * 100 + '%');
 
                 if(options.controlArrows && numSlides > 1){
                     createSlideArrows(section);
@@ -246,8 +238,7 @@
 
 
                 for(var a = 0; a<slides.length; a++){
-                    var currentSlide = slides[a];
-                    setCss(currentSlide, 'width', slideWidth + '%');
+                    setCss(slides[a], 'width', 100 / numSlides + '%');
                 }
 
                 var startingSlide = $(SLIDE_ACTIVE_SEL, section);
