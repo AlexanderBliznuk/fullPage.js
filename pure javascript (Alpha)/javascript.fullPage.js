@@ -178,6 +178,13 @@
         }
     }
 
+    //if no active section is defined, the 1st one will be the default one
+    function setDefaultSection(sections) {
+        if ($(SECTION_ACTIVE_SEL) === null) {
+            addClass(sections[0], ACTIVE);
+        }
+    }
+
     function init(callback){
         displayWarnings();
 
@@ -201,14 +208,12 @@
         }
 
         var sections = $$(SECTION_SEL);
+
+        setDefaultSection(sections);
+
         for(var i = 0; i<sections.length; i++){
             var section = sections[i];
             var numSlides = $$(SLIDE_SEL, section).length;
-
-            //if no active section is defined, the 1st one will be the default one
-            if(!i && $(SECTION_ACTIVE_SEL) === null) {
-                addClass(section, ACTIVE);
-            }
 
             if (typeof options.anchors[i] !== 'undefined') {
                 section.setAttribute('data-anchor', options.anchors[i]);
