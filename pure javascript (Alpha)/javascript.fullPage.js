@@ -251,26 +251,20 @@
     function init(callback){
         displayWarnings();
 
-
         checkTranslate3dSupport();
-
         initConatainer($$(options.sectionSelector));
-
         addEventHandlers();
 
         addInternalClassNames($$(options.sectionSelector), SECTION);
         addInternalClassNames($$(options.slideSelector), SLIDE);
 
-        //creating the navigation dots
-        if (options.navigation) {
-            addVerticalNavigation();
-        }
+        addVerticalNavigation();
 
         var sections = $$(SECTION_SEL);
-
         setDefaultSection(sections);
         handleAnchors(sections);
         buildSliders(sections);
+
         callback();
     }
 
@@ -828,57 +822,58 @@
      * Creates a vertical navigation bar.
      */
     function addVerticalNavigation(){
-        var div = document.createElement('div');
-        div.setAttribute('id', SECTION_NAV);
+        if (options.navigation) {
+            var div = document.createElement('div');
+            div.setAttribute('id', SECTION_NAV);
 
-        var divUl = document.createElement('ul');
-        div.appendChild(divUl);
+            var divUl = document.createElement('ul');
+            div.appendChild(divUl);
 
-        document.body.appendChild(div);
+            document.body.appendChild(div);
 
-        nav = $(SECTION_NAV_SEL);
+            nav = $(SECTION_NAV_SEL);
 
-        setCss(nav, 'color', options.navigationColor);
-        addClass(nav, options.navigationPosition);
+            setCss(nav, 'color', options.navigationColor);
+            addClass(nav, options.navigationPosition);
 
-        if(options.showActiveTooltip){
-            addClass(nav, SHOW_ACTIVE_TOOLTIP);
-        }
-
-        var li = '';
-
-        for (var i = 0; i < $$(SECTION_SEL).length; i++) {
-            var link = '';
-            if (options.anchors.length) {
-                link = options.anchors[i];
+            if (options.showActiveTooltip) {
+                addClass(nav, SHOW_ACTIVE_TOOLTIP);
             }
 
-            li = li + '<li><a href="#' + link + '"><span></span></a>';
+            var li = '';
 
-            // Only add tooltip if needed (defined by user)
-            var tooltip = options.navigationTooltips[i];
-            if (typeof tooltip !== undefined && tooltip !== '') {
-                li += '<div class="'+ SECTION_NAV_TOOLTIP +' ' + options.navigationPosition + '">' + tooltip + '</div>';
+            for (var i = 0; i < $$(SECTION_SEL).length; i++) {
+                var link = '';
+                if (options.anchors.length) {
+                    link = options.anchors[i];
+                }
+
+                li = li + '<li><a href="#' + link + '"><span></span></a>';
+
+                // Only add tooltip if needed (defined by user)
+                var tooltip = options.navigationTooltips[i];
+                if (typeof tooltip !== undefined && tooltip !== '') {
+                    li += '<div class="' + SECTION_NAV_TOOLTIP + ' ' + options.navigationPosition + '">' + tooltip + '</div>';
+                }
+
+                li += '</li>';
             }
 
-            li += '</li>';
+            var ul = $('ul', nav);
+            ul.innerHTML = ul.innerHTML + li;
+
+            //creating the event listener
+            var links = $$(SLIDES_NAV_LINK_SEL);
+            for (var l = 0; l < links.length; l++) {
+                addListenerMulti(links[l], 'click onclick touchstart', function (e) {
+                    e = window.event || e || e.originalEvent;
+                    preventDefault(e);
+                    var index = getNodeIndex(this.parentNode);
+
+                    scrollPage($$(SECTION_SEL)[index], null, false);
+                });
+            }
         }
-
-        var ul = $('ul', nav);
-        ul.innerHTML = ul.innerHTML + li;
-
-        //creating the event listener
-        var links = $$(SLIDES_NAV_LINK_SEL);
-        for(var l = 0; l<links.length; l++){
-            addListenerMulti(links[l], 'click onclick touchstart', function(e){
-                e = window.event || e || e.originalEvent;
-                preventDefault(e);
-                var index = getNodeIndex(this.parentNode);
-
-                scrollPage($$(SECTION_SEL)[index], null, false);
-            });
-        }
-
     }
 
     /**
