@@ -248,9 +248,7 @@
         addScrollHandler();
     }
 
-    function init(callback){
-        displayWarnings();
-
+    function initUI() {
         checkTranslate3dSupport();
         initConatainer($$(options.sectionSelector));
         addEventHandlers();
@@ -264,7 +262,11 @@
         setDefaultSection(sections);
         handleAnchors(sections);
         buildSliders(sections);
+    }
 
+    function init(callback){
+        displayWarnings();
+        initUI();
         callback();
     }
 
