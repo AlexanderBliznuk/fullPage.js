@@ -247,7 +247,7 @@
             if ($$(SLIDE_SEL, section).length > 0) {
                 sections[i].innerHTML = '<div class="' + SLIDES_WRAPPER + '"><div class="' + SLIDES_CONTAINER + '">' + sections[i].innerHTML + '</div></div>';
 
-                slides = $$(SLIDE_SEL, section);
+                var slides = $$(SLIDE_SEL, section);
 
                 setCss($(SLIDES_CONTAINER_SEL, section), 'width',  slides.length * 100 + '%');
 
@@ -257,20 +257,10 @@
                 for(var a = 0; a<slides.length; a++){
                     setCss(slides[a], 'width', 100 / slides.length + '%');
                 }
-            }
-        }
 
-        for(var i = 0; i<sections.length; i++){
-            var section = sections[i];
-            var slides = $$(SLIDE_SEL, section);
-
-            // if there's any slide
-            if (slides.length > 0) {
                 handleDefaultSlide(section, slides);
-
             }
         }
-
         callback();
     }
 
