@@ -219,6 +219,28 @@
         }
     }
 
+    function buildSliders(sections) {
+        for (var i = 0; i < sections.length; i++) {
+            var section = sections[i];
+
+            // if there's any slide
+            if ($$(SLIDE_SEL, section).length > 0) {
+                sections[i].innerHTML = '<div class="' + SLIDES_WRAPPER + '"><div class="' + SLIDES_CONTAINER + '">' + sections[i].innerHTML + '</div></div>';
+
+                var slides = $$(SLIDE_SEL, section);
+
+                setCss($(SLIDES_CONTAINER_SEL, section), 'width', slides.length * 100 + '%');
+
+                createSlideArrows(section, slides);
+                addSlidesNavigation(section, slides.length);
+
+                setSlidesWidths(slides);
+
+                handleDefaultSlide(section, slides);
+            }
+        }
+    }
+
     function init(callback){
         displayWarnings();
 
@@ -245,26 +267,7 @@
 
         setDefaultSection(sections);
         handleAnchors(sections);
-
-        for(var i = 0; i<sections.length; i++){
-            var section = sections[i];
-
-            // if there's any slide
-            if ($$(SLIDE_SEL, section).length > 0) {
-                sections[i].innerHTML = '<div class="' + SLIDES_WRAPPER + '"><div class="' + SLIDES_CONTAINER + '">' + sections[i].innerHTML + '</div></div>';
-
-                var slides = $$(SLIDE_SEL, section);
-
-                setCss($(SLIDES_CONTAINER_SEL, section), 'width',  slides.length * 100 + '%');
-
-                createSlideArrows(section, slides);
-                addSlidesNavigation(section, slides.length);
-
-                setSlidesWidths(slides);
-
-                handleDefaultSlide(section, slides);
-            }
-        }
+        buildSliders(sections);
         callback();
     }
 
