@@ -251,10 +251,9 @@
     function init(callback){
         displayWarnings();
 
-        //if css3 is not supported, it will use jQuery animations
-        if(options.css3){
-            options.css3 = support3d();
-        }
+
+        checkTranslate3dSupport();
+
         initConatainer($$(options.sectionSelector));
 
         addEventHandlers();
@@ -1932,33 +1931,35 @@
 
     /**
      * Checks for translate3d support
-     * @return boolean
      * http://stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
      */
-    function support3d() {
-        var el = document.createElement('p'),
-            has3d,
-            transforms = {
-                'webkitTransform':'-webkit-transform',
-                'OTransform':'-o-transform',
-                'msTransform':'-ms-transform',
-                'MozTransform':'-moz-transform',
-                'transform':'transform'
-            };
+    function checkTranslate3dSupport() {
+        //if css3 is not supported, it will use jQuery animations
+        if(options.css3) {
+            var el = document.createElement('p'),
+                has3d,
+                transforms = {
+                    'webkitTransform': '-webkit-transform',
+                    'OTransform': '-o-transform',
+                    'msTransform': '-ms-transform',
+                    'MozTransform': '-moz-transform',
+                    'transform': 'transform'
+                };
 
-        // Add it to the body to get the computed style.
-        document.body.insertBefore(el, null);
+            // Add it to the body to get the computed style.
+            document.body.insertBefore(el, null);
 
-        for (var t in transforms) {
-            if (el.style[t] !== undefined) {
-                el.style[t] = 'translate3d(1px,1px,1px)';
-                has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
+            for (var t in transforms) {
+                if (el.style[t] !== undefined) {
+                    el.style[t] = 'translate3d(1px,1px,1px)';
+                    has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
+                }
             }
+
+            document.body.removeChild(el);
+
+            options.css3 = (has3d !== undefined && has3d.length > 0 && has3d !== 'none');
         }
-
-        document.body.removeChild(el);
-
-        return (has3d !== undefined && has3d.length > 0 && has3d !== 'none');
     }
 
 
