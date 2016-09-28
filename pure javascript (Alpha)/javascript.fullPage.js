@@ -213,6 +213,12 @@
         }
     }
 
+    function setSlidesWidths(slides) {
+        for (var a = 0; a < slides.length; a++) {
+            setCss(slides[a], 'width', 100 / slides.length + '%');
+        }
+    }
+
     function init(callback){
         displayWarnings();
 
@@ -254,9 +260,7 @@
                 createSlideArrows(section, slides);
                 addSlidesNavigation(section, slides.length);
 
-                for(var a = 0; a<slides.length; a++){
-                    setCss(slides[a], 'width', 100 / slides.length + '%');
-                }
+                setSlidesWidths(slides);
 
                 handleDefaultSlide(section, slides);
             }
