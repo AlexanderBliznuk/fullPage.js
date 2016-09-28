@@ -185,6 +185,19 @@
         }
     }
 
+    function handleAnchors(sections) {
+        for (var i = 0; i < sections.length; i++) {
+            if (typeof options.anchors[i] !== 'undefined') {
+                sections[i].setAttribute('data-anchor', options.anchors[i]);
+
+                //activating the menu / nav element on load
+                if (hasClass(sections[i], ACTIVE)) {
+                    activateMenuAndNav(options.anchors[i], i);
+                }
+            }
+        }
+    }
+
     function init(callback){
         displayWarnings();
 
@@ -212,16 +225,7 @@
         setDefaultSection(sections);
 
 
-        for(var i = 0; i<sections.length; i++){
-            if (typeof options.anchors[i] !== 'undefined') {
-                sections[i].setAttribute('data-anchor', options.anchors[i]);
-
-                //activating the menu / nav element on load
-                if(hasClass(sections[i], ACTIVE)){
-                    activateMenuAndNav(options.anchors[i], i);
-                }
-            }
-        }
+        handleAnchors(sections);
 
         for(var i = 0; i<sections.length; i++){
             var section = sections[i];
