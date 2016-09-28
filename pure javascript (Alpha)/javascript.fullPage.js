@@ -172,6 +172,12 @@
         }
     }
 
+    function addInternalClassNames(elements, cls) {
+        for (var i = 0; i < elements.length; ++i) {
+            addClass(elements[i], cls);
+        }
+    }
+
     function init(callback){
         displayWarnings();
 
@@ -179,23 +185,15 @@
         if(options.css3){
             options.css3 = support3d();
         }
-        initConatainer();
+        initConatainer($$(options.sectionSelector));
 
         setMouseWheelScrolling(true);
         addTouchHandler();
         addResizeHandler();
         addScrollHandler();
 
-        //adding internal class names to void problem with common ones
-        var originalSections = $$(options.sectionSelector);
-        for (i = 0; i < originalSections.length; ++i) {
-            addClass(originalSections[i], SECTION);
-        }
-
-        var originalSlides = $$(options.slideSelector);
-        for (i = 0; i < originalSlides.length; ++i) {
-            addClass(originalSlides[i], SLIDE);
-        }
+        addInternalClassNames($$(options.sectionSelector), SECTION);
+        addInternalClassNames($$(options.slideSelector), SLIDE);
 
         //creating the navigation dots
         if (options.navigation) {
